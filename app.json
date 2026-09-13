@@ -1,0 +1,78 @@
+{
+  "expo": {
+    "name": "RestBooking",
+    "slug": "restbooking-mobile",
+    "scheme": "restbooking",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "backgroundColor": "#fbf6ee"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "uz.restbooking.mobile",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Доступ к галерее нужен, чтобы прикрепить фото заведения, стола или обложку статьи/баннера.",
+        "NSCameraUsageDescription": "Доступ к камере нужен, чтобы сделать фото прямо в приложении или отсканировать QR-код брони.",
+        "NSFaceIDUsageDescription": "Face ID используется для быстрого и безопасного входа в приложение."
+      }
+    },
+    "android": {
+      "package": "uz.restbooking.mobile",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#fbf6ee"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Доступ к галерее нужен, чтобы прикрепить фото заведения, стола или обложку статьи/баннера.",
+          "cameraPermission": "Доступ к камере нужен, чтобы сделать фото прямо в приложении."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Камера нужна, чтобы отсканировать QR-код брони гостя на входе."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#c1912f"
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Face ID используется для быстрого и безопасного входа в приложение."
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "https://restbooking.uz/api"
+    }
+  }
+}
