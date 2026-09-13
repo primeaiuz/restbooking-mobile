@@ -12,6 +12,13 @@ export default function VenueAdminLayout() {
   if (!hydrated) return <LoadingView />;
   if (!user) return <Redirect href="/(auth)/login" />;
   if (user.role !== 'VENUE_ADMIN') return <Redirect href="/" />;
+  // Self-registered "restaurant owner" with no venue submitted yet (see
+  // (auth)/register.tsx's account-type picker) — the tab bar below assumes a working venue
+  // (bookings/halls/etc.), so send them to the submit-venue form instead. Once a venue exists,
+  // pending.tsx is what checks whether it's been approved yet, not this layout — a stale
+  // cached user with an already-attached-but-still-pending venueId should still reach the
+  // normal Tabs below and let dashboard.tsx/pending.tsx sort that out with a fresh fetch.
+  if (!user.venueId) return <Redirect href="/(venue-onboarding)/submit-venue" />;
 
   return (
     <Tabs

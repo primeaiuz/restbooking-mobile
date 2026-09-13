@@ -4,7 +4,7 @@ import { Link, router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuth, homeRouteForRole } from '@/lib/auth-context';
 import { startPhoneVerification, getVerificationStatus, extractErrorMessage, validateReferralCode } from '@/lib/api';
-import { Screen, Title, Muted, Input, Button } from '@/components/UI';
+import { Screen, Title, Muted, Input, Button, Pill } from '@/components/UI';
 import { colors, spacing } from '@/lib/theme';
 
 export default function RegisterScreen() {
@@ -15,6 +15,7 @@ export default function RegisterScreen() {
   const params = useLocalSearchParams<{ ref?: string }>();
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('+998');
+  const [accountType, setAccountType] = useState<'CLIENT' | 'VENUE_ADMIN'>('CLIENT');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [requestId, setRequestId] = useState('');
@@ -107,7 +108,7 @@ export default function RegisterScreen() {
     }
     setLoading(true);
     try {
-      const user = await register(phone.trim(), password, fullName.trim(), requestId, email.trim() || undefined, referralCode.trim() || undefined);
+      const user = await register(phone.trim(), password, fullName.trim(), requestId, email.trim() || undefined, referralCode.trim() || undefined, accountType);
       router.replace(homeRouteForRole(user.role) as any);
     } catch (e) {
       Alert.alert(t('auth.registerError'), extractErrorMessage(e));
@@ -120,8 +121,13 @@ export default function RegisterScreen() {
     <Screen>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: spacing.xl }}>
-          <Title style={{ marginBottom: spacing.xs }}>{t('auth.registerTitle')}</Title>
-          <Muted style={{ marginBottom: spacing.lg }}>{t('auth.mClientOnlyNote')}</Muted>
+          <Title style={{ marginBottom: spacing.md }}>{t('auth.registerTitle')}</Title>
+
+          <View style={{ flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg }}>
+            <Pill label={t('auth.mAccountTypeClient')} active={accountType === 'CLIENT'} onPress={() => setAccountType('CLIENT')} />
+            <Pill label={t('auth.mAccountTypeVenueAdmin')} active={accountType === 'VENUE_ADMIN'} onPress={() => setAccountType('VENUE_ADMIN')} />
+          </View>
+
           <Input label={`${t('auth.mFullNameLabel')} *`} value={fullName} onChangeText={setFullName} placeholder={t('auth.mFullNamePlaceholder')} />
 
           <Input

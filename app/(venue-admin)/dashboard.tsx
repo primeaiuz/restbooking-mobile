@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, ScrollView, RefreshControl } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as api from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
@@ -21,6 +21,14 @@ export default function DashboardScreen() {
 
   const load = useCallback(async () => {
     try {
+      // A self-registered "restaurant owner" whose venue hasn't been approved yet has a
+      // venueId (so the (venue-admin)/_layout.tsx guard already let them past), but nothing
+      // here to show — send them to the pending-review screen instead of an all-zero dashboard.
+      const venue = await api.getMyVenue();
+      if (venue.moderationStatus !== 'APPROVED') {
+        router.replace('/(venue-onboarding)/pending');
+        return;
+      }
       const [s, bookings] = await Promise.all([api.getStats(), api.listVenueBookings()]);
       setStats(s);
       setBySource(

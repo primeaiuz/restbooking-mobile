@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { authStore, AuthState, login as apiLogin, register as apiRegister } from './api';
+import { authStore, AuthState, login as apiLogin, register as apiRegister, me as apiMe } from './api';
 import type { AuthUser } from './types';
 import i18n from './i18n';
 import { registerForPushNotifications } from './push';
@@ -9,8 +9,12 @@ interface AuthContextValue {
   accessToken: string | null;
   hydrated: boolean;
   login: (phone: string, password: string) => Promise<AuthUser>;
-  register: (phone: string, password: string, fullName: string, verificationRequestId: string, email?: string, referralCode?: string) => Promise<AuthUser>;
+  register: (phone: string, password: string, fullName: string, verificationRequestId: string, email?: string, referralCode?: string, accountType?: 'CLIENT' | 'VENUE_ADMIN') => Promise<AuthUser>;
   logout: () => Promise<void>;
+  /** Re-fetches /auth/me and updates the cached user — needed after a server-side change that
+   * isn't reflected in the locally-cached user object, e.g. venueId going from null to a real
+   * id right after submit-venue.tsx creates the venue (see (venue-admin)/_layout.tsx's guard). */
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -56,8 +60,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return res.user;
   }, []);
 
-  const register = useCallback(async (phone: string, password: string, fullName: string, verificationRequestId: string, email?: string, referralCode?: string) => {
-    const res = await apiRegister(phone, password, fullName, verificationRequestId, email, referralCode);
+  const register = useCallback(async (phone: string, password: string, fullName: string, verificationRequestId: string, email?: string, referralCode?: string, accountType?: 'CLIENT' | 'VENUE_ADMIN') => {
+    const res = await apiRegister(phone, password, fullName, verificationRequestId, email, referralCode, accountType);
     await authStore.setAuth({ accessToken: res.accessToken, refreshToken: res.refreshToken, user: res.user });
     return res.user;
   }, []);
@@ -66,8 +70,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await authStore.clear();
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    const freshUser = await apiMe();
+    const current = authStore.getState();
+    await authStore.setAuth({ ...current, user: freshUser });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user: state.user, accessToken: state.accessToken, hydrated, login, register, logout }}>
+    <AuthContext.Provider value={{ user: state.user, accessToken: state.accessToken, hydrated, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

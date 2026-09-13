@@ -83,6 +83,17 @@ export interface Hall {
   tables: TableUnit[];
 }
 
+export interface MenuItem {
+  id: number;
+  category: string;
+  name: string;
+  description: string | null;
+  priceSum: number;
+  photoUrl: string | null;
+  signature: boolean;
+  sortOrder: number;
+}
+
 export interface VenueDetail {
   id: number;
   name: string;
@@ -109,6 +120,8 @@ export interface VenueDetail {
   avgRating: number | null;
   reviewsCount: number;
   halls: Hall[];
+  menuItems: MenuItem[];
+  moderationStatus: VenueModerationStatus;
 }
 
 export interface Booking {

@@ -269,6 +269,44 @@ export default function VenueDetailScreen() {
             ))}
           </Card>
 
+          {venue.menuItems.length > 0 && (
+            <>
+              <SectionTitle>{t('venue.menuTitle')}</SectionTitle>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
+                {venue.menuItems.map((item) => (
+                  <View
+                    key={item.id}
+                    style={[styles.menuCard, item.signature && styles.menuCardSignature]}
+                  >
+                    <View style={styles.menuImageWrap}>
+                      {item.photoUrl ? (
+                        <Image source={{ uri: item.photoUrl }} style={styles.menuImage} />
+                      ) : (
+                        <View style={[styles.menuImage, { backgroundColor: colors.card }]} />
+                      )}
+                      <View style={styles.menuBadge}>
+                        <Text style={styles.menuBadgeText}>
+                          {item.signature ? `★ ${t('venue.signatureDish')}` : item.category}
+                        </Text>
+                      </View>
+                      <View style={[styles.menuBadge, { right: 8, left: undefined }]}>
+                        <Text style={styles.menuBadgeText}>
+                          {t('venue.menuPriceLabel', { value: item.priceSum.toLocaleString('ru-RU') })}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={{ color: colors.text, fontWeight: '700', marginTop: spacing.sm }} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                    {item.description ? (
+                      <Muted style={{ marginTop: 2 }} numberOfLines={2}>{item.description}</Muted>
+                    ) : null}
+                  </View>
+                ))}
+              </ScrollView>
+            </>
+          )}
+
           <SectionTitle>{t('venue.selectTable')}</SectionTitle>
           {venue.halls.length === 0 && <EmptyState text={t('venue.noTablesYet')} />}
           {venue.halls.map((hall) => (
@@ -416,4 +454,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card, borderWidth: 1, borderColor: colors.cardBorder,
   },
   slotActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  menuCard: {
+    width: 160, marginRight: spacing.sm, backgroundColor: colors.card,
+    borderWidth: 1, borderColor: colors.cardBorder, borderRadius: radius.md, padding: spacing.sm,
+  },
+  menuCardSignature: { borderColor: colors.gold, borderWidth: 2 },
+  menuImageWrap: { height: 90, borderRadius: radius.sm, overflow: 'hidden', backgroundColor: colors.card },
+  menuImage: { width: '100%', height: '100%' },
+  menuBadge: {
+    position: 'absolute', top: 6, left: 6, backgroundColor: colors.white,
+    borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3,
+  },
+  menuBadgeText: { fontSize: 10, fontWeight: '700', color: colors.text },
 });

@@ -175,11 +175,13 @@ export function register(
   verificationRequestId: string,
   email?: string,
   referralCode?: string,
+  accountType?: 'CLIENT' | 'VENUE_ADMIN',
 ) {
   return apiClient
     .post<AuthResponse>('/auth/register', {
       phone, password, fullName, email, verificationRequestId,
       referralCode: referralCode?.trim() || undefined,
+      accountType,
     })
     .then((r) => r.data);
 }
@@ -322,6 +324,16 @@ export interface VenueUpdateRequest {
 export function getMyVenue() { return apiClient.get<VenueDetail>('/venue-admin/venue').then((r) => r.data); }
 export function updateMyVenue(req: VenueUpdateRequest) {
   return apiClient.put<VenueDetail>('/venue-admin/venue', req).then((r) => r.data);
+}
+// For a VENUE_ADMIN account with no venue yet (self-registered as "restaurant owner" — see
+// register() below). Creates the venue at PENDING moderation status; see submit-venue.tsx.
+export interface SubmitVenueRequest {
+  name: string; type: VenueType; city: string; district?: string; address?: string;
+  cuisine?: string; phone?: string; description?: string;
+  latitude?: number | null; longitude?: number | null;
+}
+export function submitVenue(req: SubmitVenueRequest) {
+  return apiClient.post<VenueDetail>('/venue-admin/venue/submit', req).then((r) => r.data);
 }
 export function listHalls() { return apiClient.get<Hall[]>('/venue-admin/halls').then((r) => r.data); }
 export function createHall(name: string, description?: string) {
