@@ -19,6 +19,19 @@ const API_BASE_URL =
   (Constants.expoConfig?.extra?.apiBaseUrl as string | undefined) ||
   'http://localhost:8080/api';
 
+// The backend returns uploaded-photo URLs as a site-relative path ("/uploads/xxx.jpg") — on
+// web that resolves fine on its own since the browser fills in the current origin, but native
+// apps have no such context: an <Image> given a bare "/uploads/..." URI simply fails to load,
+// with no error surfaced anywhere (this is why menu/venue photos looked "uploaded successfully"
+// but never actually appeared). Every photoUrl/coverPhotoUrl from the API must go through this
+// before being handed to <Image>. Absolute URLs (already http(s)://) pass through untouched.
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, '');
+export function resolveImageUrl(url?: string | null): string | undefined {
+  if (!url) return undefined;
+  if (/^https?:\/\//i.test(url)) return url;
+  return `${API_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
 // Access/refresh tokens are secrets, so they live in the platform keychain/keystore
 // via expo-secure-store rather than plain AsyncStorage (which is unencrypted on-disk
 // storage that any app with filesystem access, or a rooted/jailbroken device, can read).

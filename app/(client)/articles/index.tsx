@@ -34,7 +34,7 @@ export default function ArticlesScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.card} onPress={() => router.push(`/(client)/articles/${item.id}`)} activeOpacity={0.8}>
             {item.coverImageUrl ? (
-              <Image source={{ uri: item.coverImageUrl }} style={styles.image} resizeMode="cover" />
+              <Image source={{ uri: api.resolveImageUrl(item.coverImageUrl) }} style={styles.image} resizeMode="cover" />
             ) : null}
             <View style={{ padding: spacing.md }}>
               {item.categoryName ? <Muted>{item.categoryName}</Muted> : null}

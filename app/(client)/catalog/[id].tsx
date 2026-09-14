@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import * as api from '@/lib/api';
+import { resolveImageUrl } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { scheduleBookingReminder } from '@/lib/reminders';
 import type { VenueDetail, TableUnit, Review } from '@/lib/types';
@@ -207,7 +208,7 @@ export default function VenueDetailScreen() {
       <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxl }}>
         <View style={styles.imageWrap}>
           {venue.coverPhotoUrl ? (
-            <Image source={{ uri: venue.coverPhotoUrl }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+            <Image source={{ uri: resolveImageUrl(venue.coverPhotoUrl) }} style={StyleSheet.absoluteFill} resizeMode="cover" />
           ) : null}
           <View style={styles.imageTopBar}>
             <TouchableOpacity style={styles.roundBtn} onPress={() => router.back()}>
@@ -280,7 +281,7 @@ export default function VenueDetailScreen() {
                   >
                     <View style={styles.menuImageWrap}>
                       {item.photoUrl ? (
-                        <Image source={{ uri: item.photoUrl }} style={styles.menuImage} />
+                        <Image source={{ uri: resolveImageUrl(item.photoUrl) }} style={styles.menuImage} />
                       ) : (
                         <View style={[styles.menuImage, { backgroundColor: colors.card }]} />
                       )}

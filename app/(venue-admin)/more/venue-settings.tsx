@@ -111,7 +111,7 @@ export default function VenueSettingsScreen() {
         </View>
 
         <TouchableOpacity onPress={pickCoverPhoto} style={styles.photoWrap}>
-          {coverPhotoUrl ? <Image source={{ uri: coverPhotoUrl }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
+          {coverPhotoUrl ? <Image source={{ uri: api.resolveImageUrl(coverPhotoUrl) }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
           <View style={styles.photoOverlay}>
             {uploading ? <Text style={{ color: colors.white }}>{t('common.uploading')}</Text> : (
               <>

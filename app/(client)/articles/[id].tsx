@@ -21,7 +21,7 @@ export default function ArticleDetailScreen() {
   return (
     <Screen>
       <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxl }}>
-        {article.coverImageUrl ? <Image source={{ uri: article.coverImageUrl }} style={{ width: '100%', height: 200 }} resizeMode="cover" /> : null}
+        {article.coverImageUrl ? <Image source={{ uri: api.resolveImageUrl(article.coverImageUrl) }} style={{ width: '100%', height: 200 }} resizeMode="cover" /> : null}
         <View style={{ padding: spacing.lg }}>
           <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.md }}>
             <Ionicons name="chevron-back" size={22} color={colors.text} />

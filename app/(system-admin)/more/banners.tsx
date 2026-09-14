@@ -99,7 +99,7 @@ export default function BannersScreen() {
         contentContainerStyle={{ padding: spacing.lg, paddingTop: 0 }}
         renderItem={({ item }) => (
           <Card style={{ marginBottom: spacing.md, flexDirection: 'row' }}>
-            <Image source={{ uri: item.imageUrl }} style={{ width: 64, height: 64, borderRadius: radius.sm, marginRight: spacing.md }} />
+            <Image source={{ uri: api.resolveImageUrl(item.imageUrl) }} style={{ width: 64, height: 64, borderRadius: radius.sm, marginRight: spacing.md }} />
             <View style={{ flex: 1 }}>
               <Text style={{ color: colors.text, fontWeight: '700' }}>{item.title}</Text>
               <Muted style={{ marginTop: 2 }}>{item.venueName} · {item.active ? t('common.active') : t('common.inactive')}</Muted>
@@ -126,7 +126,7 @@ export default function BannersScreen() {
             <Title style={{ marginBottom: spacing.lg }}>{draft?.id ? t('systemAdminBanners.mEditBanner') : t('systemAdminBanners.mNewBanner')}</Title>
 
             <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
-              {draft?.imageUrl ? <Image source={{ uri: draft.imageUrl }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
+              {draft?.imageUrl ? <Image source={{ uri: api.resolveImageUrl(draft.imageUrl) }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
               <View style={styles.imageOverlay}>
                 <Text style={{ color: colors.white }}>{uploading ? t('common.uploading') : t('systemAdminBanners.mSelectImage')}</Text>
               </View>

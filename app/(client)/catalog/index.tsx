@@ -138,7 +138,7 @@ function VenueCard({ venue }: { venue: VenueSummary }) {
     <TouchableOpacity style={styles.card} onPress={() => router.push(`/(client)/catalog/${venue.id}`)} activeOpacity={0.85}>
       <View style={styles.cardImageWrap}>
         {venue.coverPhotoUrl ? (
-          <Image source={{ uri: venue.coverPhotoUrl }} style={StyleSheet.absoluteFill} resizeMode="cover" />
+          <Image source={{ uri: api.resolveImageUrl(venue.coverPhotoUrl) }} style={StyleSheet.absoluteFill} resizeMode="cover" />
         ) : (
           <LinearGradient colors={gradient} style={StyleSheet.absoluteFill} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} />
         )}

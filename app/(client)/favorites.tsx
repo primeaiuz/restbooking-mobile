@@ -52,7 +52,7 @@ export default function FavoritesScreen() {
           <TouchableOpacity style={styles.card} onPress={() => router.push(`/(client)/catalog/${item.id}`)} activeOpacity={0.8}>
             <View style={styles.imageWrap}>
               {item.coverPhotoUrl ? (
-                <Image source={{ uri: item.coverPhotoUrl }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                <Image source={{ uri: api.resolveImageUrl(item.coverPhotoUrl) }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
               ) : (
                 <Ionicons name="restaurant-outline" size={28} color={colors.textFaint} style={{ margin: 'auto' }} />
               )}

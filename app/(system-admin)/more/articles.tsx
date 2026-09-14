@@ -125,7 +125,7 @@ export default function ArticlesAdminScreen() {
         contentContainerStyle={{ padding: spacing.lg, paddingTop: 0 }}
         renderItem={({ item }) => (
           <Card style={{ marginBottom: spacing.md, flexDirection: 'row' }}>
-            {item.coverImageUrl ? <Image source={{ uri: item.coverImageUrl }} style={{ width: 56, height: 56, borderRadius: radius.sm, marginRight: spacing.md }} /> : null}
+            {item.coverImageUrl ? <Image source={{ uri: api.resolveImageUrl(item.coverImageUrl) }} style={{ width: 56, height: 56, borderRadius: radius.sm, marginRight: spacing.md }} /> : null}
             <View style={{ flex: 1 }}>
               <Text style={{ color: colors.text, fontWeight: '700' }} numberOfLines={1}>{item.title}</Text>
               <Muted style={{ marginTop: 2 }}>{item.categoryName ?? t('systemAdminArticles.mNoCategory')} · {item.published ? t('systemAdminArticles.mPublishedStatus') : t('systemAdminArticles.mDraft')}</Muted>
@@ -151,7 +151,7 @@ export default function ArticlesAdminScreen() {
           <ScrollView style={styles.modalCard}>
             <Title style={{ marginBottom: spacing.lg }}>{draft?.id ? t('systemAdminArticles.mEditArticle') : t('systemAdminArticles.mNewArticle')}</Title>
             <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
-              {draft?.coverImageUrl ? <Image source={{ uri: draft.coverImageUrl }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
+              {draft?.coverImageUrl ? <Image source={{ uri: api.resolveImageUrl(draft.coverImageUrl) }} style={StyleSheet.absoluteFill} resizeMode="cover" /> : null}
               <View style={styles.imageOverlay}><Text style={{ color: colors.white }}>{uploading ? t('common.uploading') : t('systemAdminArticles.mCoverLabel')}</Text></View>
             </TouchableOpacity>
             <Input label={t('systemAdminArticles.mTitleLabel')} value={draft?.title ?? ''} onChangeText={(v) => setDraft((d) => d && { ...d, title: v })} />

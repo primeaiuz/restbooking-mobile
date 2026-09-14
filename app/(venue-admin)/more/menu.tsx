@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 import * as api from '@/lib/api';
+import { resolveImageUrl } from '@/lib/api';
 import type { MenuItem } from '@/lib/types';
 import { Screen, Title, Muted, Card, Button, Input, EmptyState, LoadingView } from '@/components/UI';
 import { colors, spacing, radius } from '@/lib/theme';
@@ -108,7 +109,7 @@ export default function MenuScreen() {
         {items.map((item) => (
           <Card key={item.id} style={{ marginBottom: spacing.md, flexDirection: 'row', gap: spacing.md }}>
             {item.photoUrl ? (
-              <Image source={{ uri: item.photoUrl }} style={styles.thumb} />
+              <Image source={{ uri: resolveImageUrl(item.photoUrl) }} style={styles.thumb} />
             ) : (
               <View style={[styles.thumb, { backgroundColor: colors.bg }]} />
             )}
@@ -144,7 +145,7 @@ export default function MenuScreen() {
 
             <TouchableOpacity onPress={pickPhoto} style={styles.photoPicker} disabled={uploading}>
               {modal?.photoUrl ? (
-                <Image source={{ uri: modal.photoUrl }} style={styles.photoPreview} />
+                <Image source={{ uri: resolveImageUrl(modal.photoUrl) }} style={styles.photoPreview} />
               ) : (
                 <Ionicons name={uploading ? 'hourglass-outline' : 'camera-outline'} size={28} color={colors.textMuted} />
               )}
