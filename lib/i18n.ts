@@ -175,6 +175,14 @@ const ru = {
     mDeleteTableConfirm: 'Удалить стол?', mZoneType: 'Тип зоны', mMinGuests: 'Мин. гостей', mMaxGuests: 'Макс. гостей',
     mActiveVisible: 'Активен (виден клиентам)', mHidden: '(скрыт)',
   },
+  adminMenu: {
+    title: 'Меню', addItemButton: '+ Добавить блюдо', addItem: 'Новое блюдо', editItem: 'Редактировать блюдо',
+    categoryPlaceholder: 'Категория (Горячее, Салат...)', namePlaceholder: 'Название блюда',
+    pricePlaceholder: 'Цена, сум', descriptionPlaceholder: 'Описание для гостей', signature: 'Фирменное блюдо',
+    saveItem: 'Сохранить', mNoItemsYet: 'Пока нет блюд. Добавьте первое.',
+    mDeleteConfirm: 'Удалить блюдо?', mNoAccessTitle: 'Нет доступа', mNoAccessMessage: 'Разрешите доступ к галерее в настройках телефона',
+    mUploadErrorTitle: 'Не удалось загрузить фото',
+  },
   adminBookings: {
     title: 'Бронирования', mNewBooking: '+ Новая', allStatuses: 'Все',
     mConfirm: 'Подтвердить', mDecline: 'Отклонить', mDeclineConfirm: 'Отклонить бронь?',
@@ -324,7 +332,7 @@ const ru = {
     mLoadFailed: 'Не удалось загрузить данные о приглашениях',
   },
   more: {
-    title: 'Ещё', clients: 'Клиенты', reviews: 'Отзывы', venueSettings: 'Настройки заведения',
+    title: 'Ещё', menu: 'Меню', clients: 'Клиенты', reviews: 'Отзывы', venueSettings: 'Настройки заведения',
     stopList: 'Стоп-лист дат', support: 'Поддержка платформы', telegram: 'Telegram-бот',
     chains: 'Сети заведений', platformReviews: 'Отзывы платформы', locations: 'Города и районы',
     banners: 'Баннеры', tariffs: 'Тарифы', articles: 'Статьи',
@@ -497,6 +505,14 @@ const uz: typeof ru = {
     mDeleteTableConfirm: 'Stolni o\'chirasizmi?', mZoneType: 'Zona turi', mMinGuests: 'Min. mehmonlar', mMaxGuests: 'Maks. mehmonlar',
     mActiveVisible: 'Faol (mijozlarga ko\'rinadi)', mHidden: '(yashirilgan)',
   },
+  adminMenu: {
+    title: 'Menyu', addItemButton: "+ Taom qo'shish", addItem: 'Yangi taom', editItem: 'Taomni tahrirlash',
+    categoryPlaceholder: 'Kategoriya (Issiq, Salat...)', namePlaceholder: 'Taom nomi',
+    pricePlaceholder: "Narxi, so'm", descriptionPlaceholder: 'Mehmonlar uchun tavsif', signature: 'Firma taomi',
+    saveItem: 'Saqlash', mNoItemsYet: "Hozircha taomlar yo'q. Birinchisini qo'shing.",
+    mDeleteConfirm: "Taomni o'chirish?", mNoAccessTitle: 'Ruxsat yoq', mNoAccessMessage: "Telefon sozlamalarida galereyaga ruxsat bering",
+    mUploadErrorTitle: "Rasmni yuklab bo'lmadi",
+  },
   adminBookings: {
     title: 'Bronlar', mNewBooking: '+ Yangi', allStatuses: 'Barchasi',
     mConfirm: 'Tasdiqlash', mDecline: 'Rad etish', mDeclineConfirm: 'Bronni rad etasizmi?',
@@ -646,7 +662,7 @@ const uz: typeof ru = {
     mLoadFailed: 'Taklif ma\'lumotlarini yuklab bo\'lmadi',
   },
   more: {
-    title: 'Yana', clients: 'Mijozlar', reviews: 'Sharhlar', venueSettings: 'Muassasa sozlamalari',
+    title: 'Yana', menu: 'Menyu', clients: 'Mijozlar', reviews: 'Sharhlar', venueSettings: 'Muassasa sozlamalari',
     stopList: 'Stop-list sanalari', support: 'Platforma yordami', telegram: 'Telegram-bot',
     chains: 'Muassasalar tarmoqlari', platformReviews: 'Platforma sharhlari', locations: 'Shaharlar va tumanlar',
     banners: 'Bannerlar', tariffs: 'Tariflar', articles: 'Maqolalar',
@@ -819,6 +835,14 @@ const en: typeof ru = {
     mDeleteTableConfirm: 'Delete this table?', mZoneType: 'Zone type', mMinGuests: 'Min. guests', mMaxGuests: 'Max. guests',
     mActiveVisible: 'Active (visible to clients)', mHidden: '(hidden)',
   },
+  adminMenu: {
+    title: 'Menu', addItemButton: '+ Add dish', addItem: 'New dish', editItem: 'Edit dish',
+    categoryPlaceholder: 'Category (Hot dishes, Salad...)', namePlaceholder: 'Dish name',
+    pricePlaceholder: 'Price, UZS', descriptionPlaceholder: 'Description for guests', signature: 'Signature dish',
+    saveItem: 'Save', mNoItemsYet: 'No dishes yet. Add your first one.',
+    mDeleteConfirm: 'Delete this dish?', mNoAccessTitle: 'No access', mNoAccessMessage: 'Allow gallery access in phone settings',
+    mUploadErrorTitle: "Couldn't upload photo",
+  },
   adminBookings: {
     title: 'Bookings', mNewBooking: '+ New', allStatuses: 'All',
     mConfirm: 'Confirm', mDecline: 'Decline', mDeclineConfirm: 'Decline this booking?',
@@ -968,7 +992,7 @@ const en: typeof ru = {
     mLoadFailed: 'Could not load referral data',
   },
   more: {
-    title: 'More', clients: 'Clients', reviews: 'Reviews', venueSettings: 'Venue settings',
+    title: 'More', menu: 'Menu', clients: 'Clients', reviews: 'Reviews', venueSettings: 'Venue settings',
     stopList: 'Stop list', support: 'Platform support', telegram: 'Telegram bot',
     chains: 'Venue chains', platformReviews: 'Platform reviews', locations: 'Cities & districts',
     banners: 'Banners', tariffs: 'Tariffs', articles: 'Articles',

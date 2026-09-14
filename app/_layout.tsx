@@ -22,11 +22,14 @@ import { BiometricGate } from '@/components/BiometricGate';
 initMonitoring();
 
 export default function RootLayout() {
-  // @expo/vector-icons renders invisible glyphs until its font is explicitly
-  // preloaded (native font linking alone isn't enough on Android release builds).
-  // Lora is the serif display face used for headings, mirroring the website.
-  const [fontsLoaded, fontsError] = useFonts({
-    ...Ionicons.font,
+  // Split into two independent useFonts() calls rather than one combined map: expo-font
+  // reports fontsError/fontsLoaded for the WHOLE batch it's given, so if the Lora variants
+  // (used only for serif headings) ever fail or are slow to resolve in a given build, that
+  // was silently taking Ionicons down with them too — even though Ionicons (used for every
+  // tab bar icon in the app) had nothing wrong with it. Decoupled, a Lora hiccup can no
+  // longer cause invisible tab icons app-wide.
+  const [iconsLoaded, iconsError] = useFonts({ ...Ionicons.font });
+  const [loraLoaded, loraError] = useFonts({
     Lora_500Medium,
     Lora_500Medium_Italic,
     Lora_600SemiBold,
@@ -34,12 +37,22 @@ export default function RootLayout() {
   });
   const [timedOut, setTimedOut] = useState(false);
   useEffect(() => {
-    const t = setTimeout(() => setTimedOut(true), 3000);
+    const t = setTimeout(() => setTimedOut(true), 6000);
     return () => clearTimeout(t);
   }, []);
-  // Never block the whole app on this — if a font fails, errors, or simply never
-  // resolves, render anyway (glyphs may fall back) rather than getting stuck forever.
-  if (!fontsLoaded && !fontsError && !timedOut) return <LoadingView />;
+  useEffect(() => {
+    // Errors were previously swallowed entirely — surfaced here (console only, picked up by
+    // Sentry's breadcrumbs via initMonitoring) so a real failure is diagnosable instead of
+    // just silently falling back to the timeout every single time.
+    if (iconsError) console.error('[fonts] Ionicons failed to load:', iconsError);
+    if (loraError) console.error('[fonts] Lora failed to load:', loraError);
+  }, [iconsError, loraError]);
+
+  const fontsSettled = (iconsLoaded || iconsError) && (loraLoaded || loraError);
+  // Never block the whole app forever — if fonts fail, error, or simply never resolve within
+  // the timeout, render anyway (glyphs may fall back) rather than getting stuck on a loading
+  // screen permanently.
+  if (!fontsSettled && !timedOut) return <LoadingView />;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

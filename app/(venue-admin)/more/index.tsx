@@ -8,6 +8,7 @@ import { Screen, Title } from '@/components/UI';
 import { colors, spacing, radius } from '@/lib/theme';
 
 const ITEMS: { icon: any; labelKey: string; href: string }[] = [
+  { icon: 'restaurant-outline', labelKey: 'more.menu', href: '/(venue-admin)/more/menu' },
   { icon: 'people-outline', labelKey: 'more.clients', href: '/(venue-admin)/more/clients' },
   { icon: 'star-outline', labelKey: 'more.reviews', href: '/(venue-admin)/more/reviews' },
   { icon: 'business-outline', labelKey: 'more.venueSettings', href: '/(venue-admin)/more/venue-settings' },

@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import { captureException } from './monitoring';
 import i18n from './i18n';
 import type {
-  AuthResponse, AuthUser, Booking, Review, VenueDetail, VenueSummary, VenueType, Hall,
+  AuthResponse, AuthUser, Booking, Review, VenueDetail, VenueSummary, VenueType, Hall, MenuItem,
   TableUnit, TableZoneType, DaySchedule, ConfirmationMode, ClientSummary, VenueStats,
   StopListEntry, City, District, ArticleCategory, ArticleSummary, Article, Banner,
   TariffPlan, BillingPeriod, ChatMessage, ChatThreadSummary, ChainVenue, VenueAdminAccount,
@@ -356,6 +356,19 @@ export function updateTable(id: number, req: TableUnitRequest) {
   return apiClient.put<TableUnit>(`/venue-admin/tables/${id}`, req).then((r) => r.data);
 }
 export function deleteTable(id: number) { return apiClient.delete(`/venue-admin/tables/${id}`); }
+
+export interface MenuItemRequest {
+  category: string; name: string; description?: string; priceSum: number;
+  photoUrl?: string; signature: boolean; sortOrder: number;
+}
+export function listMenuItems() { return apiClient.get<MenuItem[]>('/venue-admin/menu-items').then((r) => r.data); }
+export function createMenuItem(req: MenuItemRequest) {
+  return apiClient.post<MenuItem>('/venue-admin/menu-items', req).then((r) => r.data);
+}
+export function updateMenuItem(id: number, req: MenuItemRequest) {
+  return apiClient.put<MenuItem>(`/venue-admin/menu-items/${id}`, req).then((r) => r.data);
+}
+export function deleteMenuItem(id: number) { return apiClient.delete(`/venue-admin/menu-items/${id}`); }
 
 export function listStopList() { return apiClient.get<StopListEntry[]>('/venue-admin/stop-list').then((r) => r.data); }
 export function addStopListEntry(date: string, reason?: string) {

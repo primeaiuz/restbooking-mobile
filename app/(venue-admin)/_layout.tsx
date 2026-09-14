@@ -37,6 +37,7 @@ export default function VenueAdminLayout() {
       <Tabs.Screen name="bookings/new" options={{ href: null }} />
       <Tabs.Screen name="bookings/scan" options={{ href: null }} />
       <Tabs.Screen name="more/clients" options={{ href: null }} />
+      <Tabs.Screen name="more/menu" options={{ href: null }} />
       <Tabs.Screen name="more/reviews" options={{ href: null }} />
       <Tabs.Screen name="more/venue-settings" options={{ href: null }} />
       <Tabs.Screen name="more/stop-list" options={{ href: null }} />
