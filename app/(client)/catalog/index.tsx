@@ -75,6 +75,7 @@ export default function CatalogScreen() {
       </View>
 
       <FlatList
+        style={{ flex: 1 }}
         data={venues}
         keyExtractor={(v) => String(v.id)}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
@@ -94,7 +95,7 @@ export default function CatalogScreen() {
               />
             </View>
 
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.sm }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.sm }}>
               {TYPES.map((tp) => (
                 <Pill
                   key={tp}
@@ -106,7 +107,7 @@ export default function CatalogScreen() {
             </ScrollView>
 
             {cities.length > 0 && (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.md }}>
                 <Pill label={t('catalog.allCities')} active={!city} onPress={() => setCity(undefined)} />
                 {cities.map((c) => (
                   <Pill key={c.id} label={c.name} active={city === c.name} onPress={() => setCity(c.name)} />

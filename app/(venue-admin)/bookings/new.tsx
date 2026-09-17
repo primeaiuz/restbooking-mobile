@@ -76,7 +76,7 @@ export default function NewBookingScreen() {
         </View>
 
         <Muted style={{ marginBottom: spacing.sm }}>{t('adminBookings.mDateLabel')}</Muted>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.lg }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.lg }}>
           {next14Days.map((d) => {
             const key = d.format('YYYY-MM-DD');
             const active = key === date;

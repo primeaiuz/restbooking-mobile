@@ -71,6 +71,7 @@ export default function ChatThreadDetailScreen() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }} keyboardVerticalOffset={90}>
         <FlatList
           ref={listRef}
+          style={{ flex: 1 }}
           data={messages}
           keyExtractor={(m) => String(m.id)}
           contentContainerStyle={{ padding: spacing.lg }}

@@ -6,7 +6,6 @@ import { useAuth, homeRouteForRole } from '@/lib/auth-context';
 import { extractErrorMessage } from '@/lib/api';
 import { Screen, Title, Muted, Input, Button } from '@/components/UI';
 import { colors, spacing, fonts } from '@/lib/theme';
-import { fontDebugState } from '@/lib/fontDebug';
 
 export default function LoginScreen() {
   const { t } = useTranslation();
@@ -68,13 +67,6 @@ export default function LoginScreen() {
               {t('auth.registerButton')}
             </Link>
           </View>
-
-          {/* Temporary diagnostic for the tab-icon investigation — safe to delete once
-              confirmed fixed. Shows the real font-loading outcome instead of guessing. */}
-          <Text style={{ marginTop: spacing.xl, fontSize: 10, color: colors.textFaint, textAlign: 'center' }}>
-            icons: {fontDebugState.iconsLoaded ? 'loaded' : 'not loaded'}{fontDebugState.iconsError ? ` (error: ${fontDebugState.iconsError})` : ''}{'\n'}
-            lora: {fontDebugState.loraLoaded ? 'loaded' : 'not loaded'}{fontDebugState.loraError ? ` (error: ${fontDebugState.loraError})` : ''}
-          </Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </Screen>

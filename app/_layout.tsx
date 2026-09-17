@@ -18,7 +18,6 @@ import { initMonitoring } from '@/lib/monitoring';
 import { colors } from '@/lib/theme';
 import { LoadingView } from '@/components/UI';
 import { BiometricGate } from '@/components/BiometricGate';
-import { fontDebugState } from '@/lib/fontDebug';
 
 initMonitoring();
 
@@ -47,10 +46,6 @@ export default function RootLayout() {
     // just silently falling back to the timeout every single time.
     if (iconsError) console.error('[fonts] Ionicons failed to load:', iconsError);
     if (loraError) console.error('[fonts] Lora failed to load:', loraError);
-    fontDebugState.iconsLoaded = iconsLoaded;
-    fontDebugState.iconsError = iconsError ? String(iconsError.message || iconsError) : null;
-    fontDebugState.loraLoaded = loraLoaded;
-    fontDebugState.loraError = loraError ? String(loraError.message || loraError) : null;
   }, [iconsLoaded, iconsError, loraLoaded, loraError]);
 
   const fontsSettled = (iconsLoaded || iconsError) && (loraLoaded || loraError);

@@ -90,12 +90,13 @@ export default function VenueBookingsScreen() {
           </View>
         </View>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingLeft: spacing.lg, marginBottom: spacing.sm }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, paddingLeft: spacing.lg, marginBottom: spacing.sm }}>
         {FILTERS.map((f) => (
           <Pill key={f} label={f === 'ALL' ? t('adminBookings.allStatuses') : t(`status.${f}`)} active={filter === f} onPress={() => setFilter(f)} />
         ))}
       </ScrollView>
       <FlatList
+        style={{ flex: 1 }}
         data={filtered}
         keyExtractor={(b) => String(b.id)}
         contentContainerStyle={{ padding: spacing.lg }}

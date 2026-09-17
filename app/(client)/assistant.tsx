@@ -24,6 +24,12 @@ export default function AssistantScreen() {
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const listRef = useRef<FlatList>(null);
+  // The fixed keyboardVerticalOffset this used to have (90) was a guess at the header block's
+  // height below — but that height actually varies by language (ru/uz/en translations differ in
+  // length, sometimes wrapping to a second line) and by the device's font-size setting. When the
+  // guess was wrong, the input row ended up partially hidden behind the keyboard while typing.
+  // Measuring the real rendered height here instead makes the offset always correct.
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   async function send() {
     const text = input.trim();
@@ -52,13 +58,18 @@ export default function AssistantScreen() {
 
   return (
     <Screen>
-      <View style={{ padding: spacing.lg, paddingBottom: spacing.sm }}>
+      <View onLayout={(e) => setHeaderHeight(e.nativeEvent.layout.height)} style={{ padding: spacing.lg, paddingBottom: spacing.sm }}>
         <Title>{t('assistant.title')}</Title>
         <Muted>{t('assistant.subtitle')}</Muted>
       </View>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }} keyboardVerticalOffset={90}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={headerHeight}
+      >
         <FlatList
           ref={listRef}
+          style={{ flex: 1 }}
           data={messages}
           keyExtractor={(m) => m.id}
           contentContainerStyle={{ padding: spacing.lg }}

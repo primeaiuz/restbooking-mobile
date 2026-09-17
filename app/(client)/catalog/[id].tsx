@@ -273,7 +273,7 @@ export default function VenueDetailScreen() {
           {venue.menuItems.length > 0 && (
             <>
               <SectionTitle>{t('venue.menuTitle')}</SectionTitle>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.md }}>
                 {venue.menuItems.map((item) => (
                   <View
                     key={item.id}
@@ -334,7 +334,7 @@ export default function VenueDetailScreen() {
           {selectedTable && (
             <>
               <SectionTitle>{t('venue.selectDate')}</SectionTitle>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.md }}>
                 {next14Days.map((d) => {
                   const key = d.format('YYYY-MM-DD');
                   const active = key === selectedDate;
