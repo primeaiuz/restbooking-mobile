@@ -15,12 +15,17 @@ export default function AggregatorDashboardScreen() {
   const [stats, setStats] = useState<ChainStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    setError(null);
     try {
       setStats(await api.getChainStats());
-    } catch {
-      // ignore
+    } catch (e) {
+      // Previously swallowed silently — loading still flipped to false below, but stats stayed
+      // null forever, so the screen was stuck on <LoadingView /> permanently with no way to
+      // tell what went wrong (e.g. this account's chain no longer existing).
+      setError(api.extractErrorMessage(e));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -36,7 +41,18 @@ export default function AggregatorDashboardScreen() {
     ]);
   }
 
-  if (loading || !stats) return <LoadingView />;
+  if (loading) return <LoadingView />;
+
+  if (error || !stats) {
+    return (
+      <Screen>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
+          <Muted style={{ textAlign: 'center', marginBottom: spacing.md }}>{error || t('common.error')}</Muted>
+          <TouchableOpacity onPress={load}><Text style={{ color: colors.primary, fontWeight: '700' }}>{t('common.retry')}</Text></TouchableOpacity>
+        </View>
+      </Screen>
+    );
+  }
 
   return (
     <Screen>

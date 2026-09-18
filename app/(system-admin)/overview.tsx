@@ -15,12 +15,14 @@ export default function OverviewScreen() {
   const [overview, setOverview] = useState<PlatformOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    setError(null);
     try {
       setOverview(await api.getPlatformOverview());
-    } catch {
-      // ignore
+    } catch (e) {
+      setError(api.extractErrorMessage(e));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -36,7 +38,18 @@ export default function OverviewScreen() {
     ]);
   }
 
-  if (loading || !overview) return <LoadingView />;
+  if (loading) return <LoadingView />;
+
+  if (error || !overview) {
+    return (
+      <Screen>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
+          <Muted style={{ textAlign: 'center', marginBottom: spacing.md }}>{error || t('common.error')}</Muted>
+          <Text onPress={load} style={{ color: colors.primary, fontWeight: '700' }}>{t('common.retry')}</Text>
+        </View>
+      </Screen>
+    );
+  }
 
   return (
     <Screen>

@@ -11,7 +11,7 @@ import type {
   TariffPlan, BillingPeriod, ChatMessage, ChatThreadSummary, ChainVenue, VenueAdminAccount,
   ChainStats, PlatformOverview, ChainSummary, AdminVenue, PlatformReview,
   TariffAssignmentHistoryEntry, VenueModerationStatus, TelegramLinkInfo, ChatTurn,
-  AiChatResponse, ReferralSummary,
+  AiChatResponse, ReferralSummary, Waiter, ShiftStatus, TableOrder, WaiterHistory,
 } from './types';
 
 const API_BASE_URL =
@@ -536,3 +536,53 @@ export function uploadImageAsync(uri: string): Promise<string> {
 }
 
 export { API_BASE_URL };
+
+// ---- Waiter accounts (created/managed by venue-admin or aggregator, not self-registered) ----
+
+export interface CreateWaiterRequest { phone: string; password: string; fullName: string; commissionPercent: number | null; }
+export interface UpdateWaiterRequest { commissionPercent?: number | null; qrScanEnabled?: boolean; }
+
+export function listWaiters() { return apiClient.get<Waiter[]>('/venue-admin/waiters').then((r) => r.data); }
+export function createWaiter(req: CreateWaiterRequest) {
+  return apiClient.post<Waiter>('/venue-admin/waiters', req).then((r) => r.data);
+}
+export function updateWaiter(id: number, req: UpdateWaiterRequest) {
+  return apiClient.put<Waiter>(`/venue-admin/waiters/${id}`, req).then((r) => r.data);
+}
+export function deleteWaiter(id: number) { return apiClient.delete(`/venue-admin/waiters/${id}`); }
+
+// Aggregator's chain-wide view/control over waiters (across all its venues)
+export function listChainWaiters() { return apiClient.get<Waiter[]>('/aggregator/waiters').then((r) => r.data); }
+export function setChainWaiterQrScan(id: number, enabled: boolean) {
+  return apiClient.patch<Waiter>(`/aggregator/waiters/${id}/qr-scan`, { enabled }).then((r) => r.data);
+}
+export function aggregatorScanCheckIn(venueId: number, bookingId: number) {
+  return apiClient.patch<void>(`/aggregator/venues/${venueId}/bookings/${bookingId}/check-in`);
+}
+
+// ---- The waiter's own actions ----
+
+export function clockIn(latitude: number, longitude: number) {
+  return apiClient.post<ShiftStatus>('/waiter/clock-in', { latitude, longitude }).then((r) => r.data);
+}
+export function clockOut() { return apiClient.post<ShiftStatus>('/waiter/clock-out').then((r) => r.data); }
+export function getShiftStatus() { return apiClient.get<ShiftStatus>('/waiter/shift-status').then((r) => r.data); }
+
+export function openOrder(tableUnitId: number, bookingId?: number) {
+  return apiClient.post<TableOrder>('/waiter/orders', { tableUnitId, bookingId }).then((r) => r.data);
+}
+export function listMyOpenOrders() { return apiClient.get<TableOrder[]>('/waiter/orders').then((r) => r.data); }
+export function getOrder(id: number) { return apiClient.get<TableOrder>(`/waiter/orders/${id}`).then((r) => r.data); }
+export function addOrderItem(orderId: number, menuItemId: number, quantity: number) {
+  return apiClient.post<TableOrder>(`/waiter/orders/${orderId}/items`, { menuItemId, quantity }).then((r) => r.data);
+}
+export function removeOrderItem(orderId: number, itemId: number) {
+  return apiClient.delete(`/waiter/orders/${orderId}/items/${itemId}`);
+}
+export function closeOrder(orderId: number) {
+  return apiClient.patch<TableOrder>(`/waiter/orders/${orderId}/close`).then((r) => r.data);
+}
+export function getWaiterHistory() { return apiClient.get<WaiterHistory>('/waiter/history').then((r) => r.data); }
+export function waiterCheckIn(bookingId: number) {
+  return apiClient.patch<void>(`/waiter/bookings/${bookingId}/check-in`);
+}

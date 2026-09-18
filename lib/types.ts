@@ -1,4 +1,4 @@
-export type Role = 'CLIENT' | 'VENUE_ADMIN' | 'AGGREGATOR_ADMIN' | 'SYSTEM_ADMIN';
+export type Role = 'CLIENT' | 'WAITER' | 'VENUE_ADMIN' | 'AGGREGATOR_ADMIN' | 'SYSTEM_ADMIN';
 export type VenueType = 'RESTAURANT' | 'TEAHOUSE' | 'CAFE';
 export type ConfirmationMode = 'AUTO' | 'MANUAL';
 export type TableZoneType =
@@ -267,3 +267,31 @@ export interface AiChatResponse {
 export const TABLE_ZONE_TYPES: TableZoneType[] = [
   'STANDARD', 'VIP', 'VERANDA', 'BANQUET', 'TEAHOUSE_MALE', 'TEAHOUSE_FAMILY', 'TEAHOUSE_MIXED', 'OTHER',
 ];
+
+// ---- Waiter role: accounts, attendance, table orders (lightweight POS), earnings ----
+
+export interface Waiter {
+  id: number; phone: string; fullName: string; venueId: number | null;
+  commissionPercent: number | null; qrScanEnabled: boolean; onDuty: boolean;
+}
+
+export interface ShiftStatus { onDuty: boolean; since: string | null; }
+
+export interface OrderItemLine {
+  id: number; menuItemId: number; name: string; unitPriceSum: number; quantity: number; lineTotalSum: number;
+}
+
+export type TableOrderStatus = 'OPEN' | 'CLOSED';
+
+export interface TableOrder {
+  id: number; tableUnitId: number; tableUnitName: string | null; bookingId: number | null;
+  status: TableOrderStatus; openedAt: string; closedAt: string | null;
+  totalSum: number; waiterEarningSum: number | null; items: OrderItemLine[];
+}
+
+export interface WaiterShiftSummary { id: number; clockInAt: string; clockOutAt: string | null; }
+
+export interface WaiterHistory {
+  totalEarningsSum: number; totalRevenueSum: number; totalOrdersClosed: number;
+  recentOrders: TableOrder[]; recentShifts: WaiterShiftSummary[];
+}

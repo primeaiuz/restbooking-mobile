@@ -90,6 +90,7 @@ export function useAuth() {
 }
 
 export function homeRouteForRole(role?: string | null): string {
+  if (role === 'WAITER') return '/(waiter)/dashboard';
   if (role === 'VENUE_ADMIN') return '/(venue-admin)/dashboard';
   if (role === 'AGGREGATOR_ADMIN') return '/(aggregator)/dashboard';
   if (role === 'SYSTEM_ADMIN') return '/(system-admin)/overview';

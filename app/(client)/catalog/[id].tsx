@@ -27,6 +27,7 @@ export default function VenueDetailScreen() {
   const [venue, setVenue] = useState<VenueDetail | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
   const [selectedTable, setSelectedTable] = useState<TableUnit | null>(null);
@@ -52,6 +53,7 @@ export default function VenueDetailScreen() {
 
   const load = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
     try {
       const [v, r] = await Promise.all([api.getVenue(venueId), api.getVenueReviews(venueId)]);
       setVenue(v);
@@ -63,7 +65,10 @@ export default function VenueDetailScreen() {
         // not critical
       }
     } catch {
-      Alert.alert(t('venue.loadErrorTitle'), t('venue.loadError'));
+      // Previously just showed an Alert with no persistent state change — venue stayed null,
+      // so once the alert was dismissed the screen was stuck on <LoadingView /> forever with
+      // no way to retry short of leaving and re-entering the screen.
+      setLoadError(t('venue.loadError'));
     } finally {
       setLoading(false);
     }
@@ -200,7 +205,18 @@ export default function VenueDetailScreen() {
     }
   }
 
-  if (loading || !venue) return <LoadingView />;
+  if (loading) return <LoadingView />;
+
+  if (loadError || !venue) {
+    return (
+      <Screen>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
+          <Muted style={{ textAlign: 'center', marginBottom: spacing.md }}>{loadError || t('common.error')}</Muted>
+          <Text onPress={load} style={{ color: colors.primary, fontWeight: '700' }}>{t('common.retry')}</Text>
+        </View>
+      </Screen>
+    );
+  }
 
   return (
     <Screen>

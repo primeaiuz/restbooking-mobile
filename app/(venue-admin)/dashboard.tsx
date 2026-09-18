@@ -18,8 +18,10 @@ export default function DashboardScreen() {
   const [bySource, setBySource] = useState<Record<BookingSource, number> | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
+    setError(null);
     try {
       // A self-registered "restaurant owner" whose venue hasn't been approved yet has a
       // venueId (so the (venue-admin)/_layout.tsx guard already let them past), but nothing
@@ -37,8 +39,12 @@ export default function DashboardScreen() {
           { WEB: 0, ADMIN_MANUAL: 0 } as Record<BookingSource, number>,
         ),
       );
-    } catch {
-      // ignore
+    } catch (e) {
+      // Previously swallowed silently, leaving the screen stuck on <LoadingView /> forever
+      // whenever the fetch failed for any reason (e.g. this venue not existing/being
+      // reachable) — loading flipped to false below, but stats stayed null, and the render
+      // guard below required both to clear before showing anything else.
+      setError(api.extractErrorMessage(e));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -47,7 +53,18 @@ export default function DashboardScreen() {
 
   useFocusEffect(useCallback(() => { load(); }, [load]));
 
-  if (loading || !stats) return <LoadingView />;
+  if (loading) return <LoadingView />;
+
+  if (error || !stats) {
+    return (
+      <Screen>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
+          <Muted style={{ textAlign: 'center', marginBottom: spacing.md }}>{error || t('common.error')}</Muted>
+          <Text onPress={load} style={{ color: colors.primary, fontWeight: '700' }}>{t('common.retry')}</Text>
+        </View>
+      </Screen>
+    );
+  }
 
   const statusEntries = Object.entries(stats.byStatus);
 

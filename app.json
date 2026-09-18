@@ -30,7 +30,7 @@
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#373D28"
+        "backgroundColor": "#374128"
       }
     },
     "plugins": [
@@ -69,6 +69,12 @@
         "expo-local-authentication",
         {
           "faceIDPermission": "Face ID используется для быстрого и безопасного входа в приложение."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Геолокация нужна, чтобы подтвердить, что вы находитесь в заведении, при отметке начала смены."
         }
       ]
     ],
