@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, Alert } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
 import * as Location from 'expo-location';
 import { useTranslation } from 'react-i18next';
 import * as api from '@/lib/api';
@@ -11,10 +11,17 @@ import { colors, spacing } from '@/lib/theme';
 
 export default function WaiterDashboardScreen() {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [status, setStatus] = useState<ShiftStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+
+  function handleLogout() {
+    Alert.alert(t('common.logoutConfirmTitle'), undefined, [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('common.logout'), style: 'destructive', onPress: async () => { await logout(); router.replace('/(auth)/login'); } },
+    ]);
+  }
 
   const load = useCallback(async () => {
     try {
@@ -66,8 +73,15 @@ export default function WaiterDashboardScreen() {
   return (
     <Screen>
       <View style={{ padding: spacing.lg }}>
-        <Title>{t('waiter.dashboardTitle')}</Title>
-        <Muted style={{ marginTop: 4 }}>{user?.fullName}</Muted>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <View>
+            <Title>{t('waiter.dashboardTitle')}</Title>
+            <Muted style={{ marginTop: 4 }}>{user?.fullName}</Muted>
+          </View>
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={{ color: colors.danger, fontWeight: '600', fontSize: 13 }}>{t('common.logout')}</Text>
+          </TouchableOpacity>
+        </View>
 
         <Card style={{ marginTop: spacing.xl, alignItems: 'center', padding: spacing.xl }}>
           <View
