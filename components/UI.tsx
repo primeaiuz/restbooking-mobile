@@ -65,7 +65,13 @@ export function Button({ title, onPress, variant = 'primary', loading, disabled,
 export function Input(props: TextInputProps & { label?: string }) {
   const { label, style, ...rest } = props;
   return (
-    <View style={{ marginBottom: spacing.md }}>
+    // Previously `style` only reached the inner TextInput below, never this wrapper — so
+    // `style={{ flex: 1 }}` (needed whenever an Input sits in a row next to a button, e.g. a
+    // chat input row) silently did nothing, because the wrapper — the actual flex participant
+    // in the row — stayed unsized. Same reason `marginBottom: 0` overrides never worked: the
+    // wrapper's own marginBottom below is what needed overriding, not the TextInput's (which
+    // never had one). Spreading `style` onto the wrapper too fixes both at once.
+    <View style={[{ marginBottom: spacing.md }, style]}>
       {label ? <Label style={{ marginBottom: spacing.xs }}>{label}</Label> : null}
       <TextInput
         placeholderTextColor={colors.textFaint}
