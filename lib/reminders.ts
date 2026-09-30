@@ -9,15 +9,9 @@ import i18n from './i18n';
 // it only works if the app has been opened at least once on this device to schedule
 // the reminder, and it's lost if the user reinstalls the app.
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Notifications.setNotificationHandler(...) used to live here, but that meant it only ran when
+// this module happened to get imported (two client-only screens) — see app/_layout.tsx, where
+// it's now set unconditionally at app startup for every role.
 
 const HOURS_BEFORE = 2;
 

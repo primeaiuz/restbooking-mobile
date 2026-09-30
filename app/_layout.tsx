@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import '@/lib/i18n';
 import React, { useEffect, useState } from 'react';
+import * as Notifications from 'expo-notifications';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -20,6 +21,23 @@ import { LoadingView } from '@/components/UI';
 import { BiometricGate } from '@/components/BiometricGate';
 
 initMonitoring();
+
+// Previously this only ran as a side effect of importing lib/reminders.ts, which only two
+// client-only screens ((client)/bookings.tsx and (client)/catalog/[id].tsx) ever imported. That
+// meant venue-admin/waiter/aggregator sessions never configured this at all (those screens never
+// load for them), and even client sessions only got it after visiting one of those two screens —
+// any push arriving before that, or to any non-client account, had no explicit foreground display
+// behavior configured. Setting it here means it's always in place the moment the app starts,
+// for every role, before any push can possibly arrive.
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 
 export default function RootLayout() {
   // Split into two independent useFonts() calls rather than one combined map: expo-font
