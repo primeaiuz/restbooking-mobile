@@ -12,6 +12,7 @@ import type {
   ChainStats, PlatformOverview, ChainSummary, AdminVenue, PlatformReview,
   TariffAssignmentHistoryEntry, VenueModerationStatus, TelegramLinkInfo, ChatTurn,
   AiChatResponse, ReferralSummary, Waiter, ShiftStatus, TableOrder, WaiterHistory,
+  DeliveryOrder, DeliveryStatus,
 } from './types';
 
 const API_BASE_URL =
@@ -585,4 +586,43 @@ export function closeOrder(orderId: number) {
 export function getWaiterHistory() { return apiClient.get<WaiterHistory>('/waiter/history').then((r) => r.data); }
 export function waiterCheckIn(bookingId: number) {
   return apiClient.patch<void>(`/waiter/bookings/${bookingId}/check-in`);
+}
+
+// ---- Delivery orders ----
+
+export interface CreateDeliveryOrderRequest {
+  venueId: number; deliveryLat: number; deliveryLng: number; addressNote?: string;
+  items: { menuItemId: number; quantity: number }[];
+}
+
+export function createDeliveryOrder(req: CreateDeliveryOrderRequest) {
+  return apiClient.post<DeliveryOrder>('/delivery-orders', req).then((r) => r.data);
+}
+export function myDeliveryOrders() {
+  return apiClient.get<DeliveryOrder[]>('/delivery-orders').then((r) => r.data);
+}
+export function cancelDeliveryOrder(id: number) {
+  return apiClient.patch<DeliveryOrder>(`/delivery-orders/${id}/cancel`).then((r) => r.data);
+}
+
+// Venue-admin side
+export function listVenueDeliveryOrders(status?: DeliveryStatus) {
+  return apiClient
+    .get<DeliveryOrder[]>('/venue-admin/delivery-orders', { params: status ? { status } : undefined })
+    .then((r) => r.data);
+}
+export function confirmDeliveryOrder(id: number) {
+  return apiClient.patch<DeliveryOrder>(`/venue-admin/delivery-orders/${id}/confirm`).then((r) => r.data);
+}
+export function declineDeliveryOrder(id: number, reason?: string) {
+  return apiClient.patch<DeliveryOrder>(`/venue-admin/delivery-orders/${id}/decline`, { reason }).then((r) => r.data);
+}
+export function markOutForDelivery(id: number) {
+  return apiClient.patch<DeliveryOrder>(`/venue-admin/delivery-orders/${id}/out-for-delivery`).then((r) => r.data);
+}
+export function markDelivered(id: number) {
+  return apiClient.patch<DeliveryOrder>(`/venue-admin/delivery-orders/${id}/delivered`).then((r) => r.data);
+}
+export function setDeliveryEnabled(enabled: boolean) {
+  return apiClient.patch<void>('/venue-admin/venue/delivery-enabled', { enabled });
 }

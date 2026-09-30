@@ -122,6 +122,7 @@ export interface VenueDetail {
   halls: Hall[];
   menuItems: MenuItem[];
   moderationStatus: VenueModerationStatus;
+  deliveryEnabled: boolean;
 }
 
 export interface Booking {
@@ -290,6 +291,21 @@ export interface TableOrder {
 }
 
 export interface WaiterShiftSummary { id: number; clockInAt: string; clockOutAt: string | null; }
+
+export type DeliveryStatus = 'PENDING' | 'CONFIRMED' | 'DECLINED' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'CANCELLED'
+
+export interface DeliveryOrderItem {
+  id: number; menuItemId: number | null; name: string; unitPriceSum: number; quantity: number; lineTotalSum: number;
+}
+
+export interface DeliveryOrder {
+  id: number; venueId: number; venueName: string | null; status: DeliveryStatus;
+  deliveryLat: number; deliveryLng: number; addressNote: string | null;
+  totalSum: number; cancelReason: string | null;
+  createdAt: string; confirmedAt: string | null; outForDeliveryAt: string | null;
+  deliveredAt: string | null; cancelledAt: string | null;
+  items: DeliveryOrderItem[];
+}
 
 export interface WaiterHistory {
   totalEarningsSum: number; totalRevenueSum: number; totalOrdersClosed: number;

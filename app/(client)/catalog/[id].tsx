@@ -14,6 +14,7 @@ import type { VenueDetail, TableUnit, Review } from '@/lib/types';
 import {
   Screen, Title, Subtitle, Muted, Label, Input, Button, Card, EmptyState, LoadingView, Divider,
 } from '@/components/UI';
+import { DeliveryOrderModal } from '@/components/DeliveryOrderModal';
 import { colors, spacing, radius } from '@/lib/theme';
 
 export default function VenueDetailScreen() {
@@ -48,6 +49,8 @@ export default function VenueDetailScreen() {
   // fold the extra details into the existing free-text comment field that's already
   // shown to the venue admin, rather than waiting on a backend/data-model change.
   const [isBanquet, setIsBanquet] = useState(false);
+  const [deliveryModalVisible, setDeliveryModalVisible] = useState(false);
+  const [deliverySuccess, setDeliverySuccess] = useState(false);
   const [banquetOccasion, setBanquetOccasion] = useState('');
   const [banquetWishes, setBanquetWishes] = useState('');
 
@@ -288,7 +291,19 @@ export default function VenueDetailScreen() {
 
           {venue.menuItems.length > 0 && (
             <>
-              <SectionTitle>{t('venue.menuTitle')}</SectionTitle>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <SectionTitle>{t('venue.menuTitle')}</SectionTitle>
+                {venue.deliveryEnabled && (
+                  <TouchableOpacity onPress={() => setDeliveryModalVisible(true)} style={{ backgroundColor: colors.primary, borderRadius: 20, paddingHorizontal: spacing.md, paddingVertical: spacing.xs }}>
+                    <Text style={{ color: colors.white, fontWeight: '700', fontSize: 13 }}>{t('delivery.orderButton')}</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              {deliverySuccess && (
+                <View style={{ backgroundColor: colors.card, borderRadius: 12, padding: spacing.sm, marginBottom: spacing.sm }}>
+                  <Muted style={{ color: colors.success }}>{t('delivery.mOrderSuccess')}</Muted>
+                </View>
+              )}
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, marginBottom: spacing.md }}>
                 {venue.menuItems.map((item) => (
                   <View
@@ -432,6 +447,17 @@ export default function VenueDetailScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <DeliveryOrderModal
+        venue={venue}
+        visible={deliveryModalVisible}
+        onClose={() => setDeliveryModalVisible(false)}
+        onSuccess={() => {
+          setDeliveryModalVisible(false);
+          setDeliverySuccess(true);
+          setTimeout(() => setDeliverySuccess(false), 4000);
+        }}
+      />
     </Screen>
   );
 }

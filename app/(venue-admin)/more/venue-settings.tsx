@@ -33,6 +33,8 @@ export default function VenueSettingsScreen() {
   const [eveningSlotDurationMinutes, setEveningSlotDurationMinutes] = useState('120');
   const [bufferMinutes, setBufferMinutes] = useState('15');
   const [active, setActive] = useState(true);
+  const [deliveryEnabled, setDeliveryEnabledState] = useState(false);
+  const [deliveryBusy, setDeliveryBusy] = useState(false);
 
   useEffect(() => {
     api.getMyVenue().then((v) => {
@@ -48,6 +50,7 @@ export default function VenueSettingsScreen() {
       setEveningStartTime(v.eveningStartTime);
       setEveningSlotDurationMinutes(String(v.eveningSlotDurationMinutes));
       setBufferMinutes(String(v.bufferMinutes));
+      setDeliveryEnabledState(v.deliveryEnabled);
       setActive(v.active);
     }).catch(() => {}).finally(() => setLoading(false));
   }, []);
@@ -95,6 +98,22 @@ export default function VenueSettingsScreen() {
       Alert.alert(t('common.error'), api.extractErrorMessage(e));
     } finally {
       setSaving(false);
+    }
+  }
+
+  // Separate from save() on purpose — the backend enforces a Telegram-linked gate on this one
+  // specific flag (see DeliveryService#setDeliveryEnabled), and bundling it into the general
+  // venue-update request would let that gate be silently bypassed. Own call, own error message,
+  // takes effect immediately rather than waiting on the "Сохранить" button below.
+  async function toggleDelivery(next: boolean) {
+    setDeliveryBusy(true);
+    try {
+      await api.setDeliveryEnabled(next);
+      setDeliveryEnabledState(next);
+    } catch (e) {
+      Alert.alert(t('common.error'), api.extractErrorMessage(e));
+    } finally {
+      setDeliveryBusy(false);
     }
   }
 
@@ -152,6 +171,13 @@ export default function VenueSettingsScreen() {
             <Switch value={!d.closed} onValueChange={(v) => updateDay(idx, { closed: !v })} trackColor={{ true: colors.primary }} />
           </View>
         ))}
+
+        <Text style={styles.sectionTitle}>{t('adminVenueSettings.deliveryTitle')}</Text>
+        <Muted style={{ marginBottom: spacing.sm }}>{t('adminVenueSettings.deliverySubtitle')}</Muted>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg }}>
+          <Text style={{ color: colors.text, fontWeight: '600' }}>{t('adminVenueSettings.deliveryEnabledLabel')}</Text>
+          <Switch value={deliveryEnabled} onValueChange={toggleDelivery} disabled={deliveryBusy} trackColor={{ true: colors.primary }} />
+        </View>
 
         <Text style={styles.sectionTitle}>{t('adminVenueSettings.mBookingRulesTitle')}</Text>
         <Muted style={{ marginBottom: spacing.sm }}>{t('adminVenueSettings.mConfirmationModeLabel')}</Muted>

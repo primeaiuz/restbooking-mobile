@@ -79,7 +79,10 @@
       ]
     ],
     "extra": {
-      "apiBaseUrl": "https://restbooking.uz/api"
+      "apiBaseUrl": "https://restbooking.uz/api",
+      "eas": {
+        "projectId": "941df643-8d5a-4ff2-b167-4a7883483b9f"
+      }
     }
   }
 }

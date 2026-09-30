@@ -110,6 +110,7 @@ const ru = {
   },
   verification: { wrongCode: 'Неверный код' },
   myBookings: {
+    tabBookings: 'Столики', tabDelivery: 'Доставка',
     title: 'Мои бронирования', empty: 'У вас пока нет бронирований', cancelButton: 'Отменить бронь',
     reviewButton: 'Оставить отзыв', reviewCommentPlaceholder: 'Комментарий (необязательно)',
     mCancelTitle: 'Отменить бронь?', mDontCancel: 'Не отменять',
@@ -154,7 +155,7 @@ const ru = {
     title: 'Обзор заведения', bookings30d: 'Брони за 30 дней', occupancy: 'Заполняемость',
     noShowRate: 'Неявки', rating: 'Рейтинг', byStatusTitle: 'По статусам', noData: 'Нет данных',
   },
-  adminVenueSettings: {
+  adminVenueSettings: { deliveryTitle: 'Доставка', deliverySubtitle: 'Клиенты смогут заказывать еду с доставкой', deliveryEnabledLabel: 'Принимать заказы на доставку',
     title: 'Настройки заведения', name: 'Название', city: 'Город', district: 'Район', address: 'Адрес',
     cuisine: 'Кухня', phone: 'Телефон', description: 'Описание', workingHours: 'Часы работы',
     saveButton: 'Сохранить изменения', saved: 'Настройки заведения обновлены',
@@ -299,6 +300,26 @@ const ru = {
     mActiveTitle: 'Активно', mChainTitle: 'Сеть', mTariffTitle: 'Тариф', mCloseButton: 'Закрыть',
   },
   mChat: { title: 'Чаты поддержки', mEmpty: 'Пока нет обращений' },
+  adminDelivery: {
+    title: 'Заказы на доставку', subtitle: 'Обновляется автоматически',
+    allStatuses: 'Все статусы', orderNumber: 'Заказ №{{id}}', addressNote: 'Комментарий к адресу',
+    viewOnMap: 'Показать на карте', confirmButton: 'Подтвердить', declineButton: 'Отклонить',
+    outForDeliveryButton: 'Курьер выехал', deliveredButton: 'Доставлено', mNoOrders: 'Заказов на доставку пока нет',
+  },
+  deliveryStatus: {
+    PENDING: 'Ожидает подтверждения', CONFIRMED: 'Подтверждён', DECLINED: 'Отклонён',
+    OUT_FOR_DELIVERY: 'В пути', DELIVERED: 'Доставлен', CANCELLED: 'Отменён',
+  },
+  delivery: {
+    orderButton: 'Заказать доставку', modalTitle: 'Заказ на доставку',
+    locationLabel: 'Адрес доставки', useCurrentLocationButton: 'Моё местоположение',
+    mLocationFailed: 'Не удалось определить местоположение', mMapHint: 'Нажмите на карту, чтобы указать адрес',
+    addressNoteLabel: 'Комментарий к адресу', addressNotePlaceholder: 'Квартира, подъезд, код домофона...',
+    submitButton: 'Оформить заказ', mOrderSuccess: 'Заказ отправлен! Ожидайте подтверждения.',
+    mPickItemsHint: 'Выберите хотя бы одно блюдо', mPickLocationHint: 'Укажите адрес на карте',
+  },
+  myDelivery: { title: 'Моя доставка', cancelButton: 'Отменить заказ', mNoOrders: 'У вас пока нет заказов на доставку' },
+
   waiter: {
     tabDashboard: 'Смена', tabOrders: 'Заказы', tabScan: 'Сканер', tabHistory: 'Заработок',
     dashboardTitle: 'Моя смена',
@@ -351,7 +372,7 @@ const ru = {
     mShareMessage: 'Присоединяйся к RestBooking по моему коду {{code}}: {{url}}',
     mLoadFailed: 'Не удалось загрузить данные о приглашениях',
   },
-  more: {
+  more: { delivery: 'Доставка',
     title: 'Ещё', menu: 'Меню', clients: 'Клиенты', reviews: 'Отзывы', venueSettings: 'Настройки заведения',
     stopList: 'Стоп-лист дат', support: 'Поддержка платформы', telegram: 'Telegram-бот',
     chains: 'Сети заведений', platformReviews: 'Отзывы платформы', locations: 'Города и районы',
@@ -460,6 +481,7 @@ const uz: typeof ru = {
   },
   verification: { wrongCode: "Kod noto'g'ri" },
   myBookings: {
+    tabBookings: 'Stollar', tabDelivery: 'Yetkazib berish',
     title: 'Bronlarim', empty: 'Sizda hali bronlar yo\'q', cancelButton: 'Bronni bekor qilish',
     reviewButton: 'Sharh qoldirish', reviewCommentPlaceholder: 'Izoh (ixtiyoriy)',
     mCancelTitle: 'Bronni bekor qilasizmi?', mDontCancel: 'Bekor qilmaslik',
@@ -504,7 +526,7 @@ const uz: typeof ru = {
     title: 'Muassasa umumiy ko\'rinishi', bookings30d: '30 kundagi bronlar', occupancy: 'Bandlik',
     noShowRate: 'Kelmaganlar', rating: 'Reyting', byStatusTitle: 'Holat bo\'yicha', noData: 'Ma\'lumot yo\'q',
   },
-  adminVenueSettings: {
+  adminVenueSettings: { deliveryTitle: "Yetkazib berish", deliverySubtitle: "Mijozlar yetkazib berishga buyurtma bera olishadi", deliveryEnabledLabel: "Yetkazib berish buyurtmalarini qabul qilish",
     title: 'Muassasa sozlamalari', name: 'Nomi', city: 'Shahar', district: 'Tuman', address: 'Manzil',
     cuisine: 'Oshxona turi', phone: 'Telefon', description: 'Tavsif', workingHours: 'Ish vaqti',
     saveButton: 'O\'zgarishlarni saqlash', saved: 'Muassasa sozlamalari yangilandi',
@@ -649,6 +671,26 @@ const uz: typeof ru = {
     mActiveTitle: 'Faol', mChainTitle: 'Tarmoq', mTariffTitle: 'Tarif', mCloseButton: 'Yopish',
   },
   mChat: { title: 'Yordam chatlari', mEmpty: 'Hozircha murojaatlar yo\'q' },
+  adminDelivery: {
+    title: 'Yetkazib berish buyurtmalari', subtitle: 'Avtomatik yangilanadi',
+    allStatuses: 'Barcha statuslar', orderNumber: 'Buyurtma №{{id}}', addressNote: 'Manzilga izoh',
+    viewOnMap: "Xaritada ko'rsatish", confirmButton: 'Tasdiqlash', declineButton: 'Rad etish',
+    outForDeliveryButton: "Kuryer yo'lga chiqdi", deliveredButton: 'Yetkazildi', mNoOrders: "Hozircha yetkazib berish buyurtmalari yo'q",
+  },
+  deliveryStatus: {
+    PENDING: 'Tasdiqlanishi kutilmoqda', CONFIRMED: 'Tasdiqlangan', DECLINED: 'Rad etilgan',
+    OUT_FOR_DELIVERY: "Yo'lda", DELIVERED: 'Yetkazildi', CANCELLED: 'Bekor qilingan',
+  },
+  delivery: {
+    orderButton: 'Yetkazib berishga buyurtma', modalTitle: 'Yetkazib berish buyurtmasi',
+    locationLabel: 'Yetkazib berish manzili', useCurrentLocationButton: 'Mening joylashuvim',
+    mLocationFailed: "Joylashuvni aniqlab bo'lmadi", mMapHint: 'Manzilni belgilash uchun xaritani bosing',
+    addressNoteLabel: 'Manzilga izoh', addressNotePlaceholder: 'Xonadon, kirish, domofon kodi...',
+    submitButton: 'Buyurtma berish', mOrderSuccess: 'Buyurtma yuborildi! Tasdiqlashni kuting.',
+    mPickItemsHint: 'Kamida bitta taom tanlang', mPickLocationHint: 'Xaritada manzilni belgilang',
+  },
+  myDelivery: { title: 'Mening yetkazib berishlarim', cancelButton: 'Bekor qilish', mNoOrders: "Hozircha buyurtmalar yo'q" },
+
   waiter: {
     tabDashboard: 'Smena', tabOrders: 'Buyurtmalar', tabScan: 'Skaner', tabHistory: 'Daromad',
     dashboardTitle: 'Mening smenam',
@@ -701,7 +743,7 @@ const uz: typeof ru = {
     mShareMessage: 'RestBooking-ga mening kodim {{code}} orqali qo\'shiling: {{url}}',
     mLoadFailed: 'Taklif ma\'lumotlarini yuklab bo\'lmadi',
   },
-  more: {
+  more: { delivery: "Yetkazib berish",
     title: 'Yana', menu: 'Menyu', clients: 'Mijozlar', reviews: 'Sharhlar', venueSettings: 'Muassasa sozlamalari',
     stopList: 'Stop-list sanalari', support: 'Platforma yordami', telegram: 'Telegram-bot',
     chains: 'Muassasalar tarmoqlari', platformReviews: 'Platforma sharhlari', locations: 'Shaharlar va tumanlar',
@@ -810,6 +852,7 @@ const en: typeof ru = {
   },
   verification: { wrongCode: 'Incorrect code' },
   myBookings: {
+    tabBookings: 'Tables', tabDelivery: 'Delivery',
     title: 'My Bookings', empty: "You don't have any bookings yet", cancelButton: 'Cancel booking',
     reviewButton: 'Leave a review', reviewCommentPlaceholder: 'Comment (optional)',
     mCancelTitle: 'Cancel this booking?', mDontCancel: "Don't cancel",
@@ -854,7 +897,7 @@ const en: typeof ru = {
     title: 'Venue overview', bookings30d: 'Bookings (30 days)', occupancy: 'Occupancy',
     noShowRate: 'No-shows', rating: 'Rating', byStatusTitle: 'By status', noData: 'No data',
   },
-  adminVenueSettings: {
+  adminVenueSettings: { deliveryTitle: 'Delivery', deliverySubtitle: 'Clients will be able to order delivery', deliveryEnabledLabel: 'Accept delivery orders',
     title: 'Venue settings', name: 'Name', city: 'City', district: 'District', address: 'Address',
     cuisine: 'Cuisine', phone: 'Phone', description: 'Description', workingHours: 'Working hours',
     saveButton: 'Save changes', saved: 'Venue settings updated',
@@ -999,6 +1042,26 @@ const en: typeof ru = {
     mActiveTitle: 'Active', mChainTitle: 'Chain', mTariffTitle: 'Tariff', mCloseButton: 'Close',
   },
   mChat: { title: 'Support chats', mEmpty: 'No requests yet' },
+  adminDelivery: {
+    title: 'Delivery orders', subtitle: 'Refreshes automatically',
+    allStatuses: 'All statuses', orderNumber: 'Order #{{id}}', addressNote: 'Address note',
+    viewOnMap: 'View on map', confirmButton: 'Confirm', declineButton: 'Decline',
+    outForDeliveryButton: 'Courier left', deliveredButton: 'Delivered', mNoOrders: 'No delivery orders yet',
+  },
+  deliveryStatus: {
+    PENDING: 'Awaiting confirmation', CONFIRMED: 'Confirmed', DECLINED: 'Declined',
+    OUT_FOR_DELIVERY: 'Out for delivery', DELIVERED: 'Delivered', CANCELLED: 'Cancelled',
+  },
+  delivery: {
+    orderButton: 'Order delivery', modalTitle: 'Delivery order',
+    locationLabel: 'Delivery location', useCurrentLocationButton: 'My location',
+    mLocationFailed: "Couldn't get your location", mMapHint: 'Tap the map to set the address',
+    addressNoteLabel: 'Address note', addressNotePlaceholder: 'Apartment, entrance, gate code...',
+    submitButton: 'Place order', mOrderSuccess: 'Order sent! Waiting for confirmation.',
+    mPickItemsHint: 'Pick at least one dish', mPickLocationHint: 'Set the location on the map',
+  },
+  myDelivery: { title: 'My delivery orders', cancelButton: 'Cancel order', mNoOrders: 'No delivery orders yet' },
+
   waiter: {
     tabDashboard: 'Shift', tabOrders: 'Orders', tabScan: 'Scan', tabHistory: 'Earnings',
     dashboardTitle: 'My shift',
@@ -1051,7 +1114,7 @@ const en: typeof ru = {
     mShareMessage: 'Join RestBooking with my code {{code}}: {{url}}',
     mLoadFailed: 'Could not load referral data',
   },
-  more: {
+  more: { delivery: 'Delivery',
     title: 'More', menu: 'Menu', clients: 'Clients', reviews: 'Reviews', venueSettings: 'Venue settings',
     stopList: 'Stop list', support: 'Platform support', telegram: 'Telegram bot',
     chains: 'Venue chains', platformReviews: 'Platform reviews', locations: 'Cities & districts',

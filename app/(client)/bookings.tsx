@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import * as api from '@/lib/api';
 import { cancelReminder } from '@/lib/reminders';
-import type { Booking } from '@/lib/types';
+import type { Booking, DeliveryOrder } from '@/lib/types';
 import { Screen, Title, Muted, Badge, EmptyState, LoadingView, Card, Button, Input } from '@/components/UI';
 import { colors, spacing, statusColor } from '@/lib/theme';
 
@@ -23,10 +23,75 @@ export function bookingQrPayload(b: Pick<Booking, 'id' | 'venueId'>) {
 // review for the same booking (the server would just reject the duplicate).
 const REVIEWED_KEY = 'restbooking_reviewed_booking_ids';
 
+function DeliveryTab() {
+  const { t } = useTranslation();
+  const [orders, setOrders] = useState<DeliveryOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [busyId, setBusyId] = useState<number | null>(null);
+
+  const load = useCallback(async () => {
+    try {
+      setOrders(await api.myDeliveryOrders());
+    } catch {
+      // ignore — empty state shows
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(useCallback(() => {
+    load();
+    const interval = setInterval(load, 20000);
+    return () => clearInterval(interval);
+  }, [load]));
+
+  async function cancel(id: number) {
+    setBusyId(id);
+    try {
+      await api.cancelDeliveryOrder(id);
+      await load();
+    } catch (e) {
+      Alert.alert(t('common.error'), api.extractErrorMessage(e));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  if (loading) return <LoadingView />;
+
+  return (
+    <FlatList
+      style={{ flex: 1 }}
+      data={orders}
+      keyExtractor={(o) => String(o.id)}
+      contentContainerStyle={{ padding: spacing.lg }}
+      ListEmptyComponent={<EmptyState text={t('myDelivery.mNoOrders')} />}
+      renderItem={({ item }) => (
+        <Card style={{ marginBottom: spacing.md }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <Text style={{ color: colors.text, fontWeight: '700', fontSize: 15, flex: 1 }}>{item.venueName}</Text>
+            <Badge text={t(`deliveryStatus.${item.status}`)} color={statusColor[item.status] ?? colors.textMuted} />
+          </View>
+          <Muted style={{ marginTop: spacing.xs }}>{item.items.map((i) => `${i.name} ×${i.quantity}`).join(', ')}</Muted>
+          <Text style={{ color: colors.primary, fontWeight: '800', marginTop: spacing.xs }}>
+            {item.totalSum.toLocaleString('ru-RU')}
+          </Text>
+          {(item.status === 'PENDING' || item.status === 'CONFIRMED') && (
+            <TouchableOpacity disabled={busyId === item.id} onPress={() => cancel(item.id)} style={{ marginTop: spacing.sm }}>
+              <Text style={{ color: colors.danger, fontWeight: '600', fontSize: 13 }}>{t('myDelivery.cancelButton')}</Text>
+            </TouchableOpacity>
+          )}
+        </Card>
+      )}
+    />
+  );
+}
+
 export default function MyBookingsScreen() {
   const { t } = useTranslation();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'bookings' | 'delivery'>('bookings');
   const [reviewedIds, setReviewedIds] = useState<Set<number>>(new Set());
   const [reviewFor, setReviewFor] = useState<Booking | null>(null);
   const [rating, setRating] = useState(5);
@@ -130,7 +195,23 @@ export default function MyBookingsScreen() {
     <Screen>
       <View style={{ padding: spacing.lg, paddingBottom: 0 }}>
         <Title>{t('myBookings.title')}</Title>
+        <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
+          <TouchableOpacity
+            onPress={() => setTab('bookings')}
+            style={{ paddingHorizontal: spacing.md, paddingVertical: 7, borderRadius: 999, backgroundColor: tab === 'bookings' ? colors.primary : colors.card }}
+          >
+            <Text style={{ color: tab === 'bookings' ? colors.white : colors.text, fontSize: 13, fontWeight: '600' }}>{t('myBookings.tabBookings')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setTab('delivery')}
+            style={{ paddingHorizontal: spacing.md, paddingVertical: 7, borderRadius: 999, backgroundColor: tab === 'delivery' ? colors.primary : colors.card }}
+          >
+            <Text style={{ color: tab === 'delivery' ? colors.white : colors.text, fontSize: 13, fontWeight: '600' }}>{t('myBookings.tabDelivery')}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+      {tab === 'delivery' && <DeliveryTab />}
+      {tab === 'bookings' && (
       <FlatList
         data={bookings}
         keyExtractor={(b) => String(b.id)}
@@ -177,6 +258,7 @@ export default function MyBookingsScreen() {
         )}
         ListEmptyComponent={<EmptyState text={t('myBookings.empty')} />}
       />
+      )}
 
       <Modal visible={!!reviewFor} transparent animationType="slide" onRequestClose={() => setReviewFor(null)}>
         <View style={styles.modalBackdrop}>
